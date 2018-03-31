@@ -1,23 +1,7 @@
 <template>
     <div class="text-white">
-      <div class="signChoiceBox" v-show="!playerSign">
-        <div class="signChoiceBox_logo">
-            <div class="logo-neon alis-logo">
-              <img src="img/alis-icon.png" width="100px">
-            </div>
-            <div class="logo-neon tictactoe-logo">
-              <img src="img/tictactoe-icon.png" width="300px">
-            </div>
-        </div>
-        <div class="signChoiceBox_choices">
-            <div class="sign-choice-cell cell" @click.prevent="chooseSign('X')">
-                <img src="img/x-icon.png" width="100px">
-            </div>
-            <h2 class="mx-3">ou</h2>
-            <div class="sign-choice-cell cell" @click.prevent="chooseSign('O')">
-                <img src="img/o-icon.png" width="100px">
-            </div>
-        </div>
+      <div v-show="!playerSign">
+        <PreferencesComponent></PreferencesComponent>
       </div>
 
       <div v-show="playerSign" class="play-zone row">
@@ -64,6 +48,7 @@
 
 <script>
     import LogoComponent from './GameComponents/LogoComponent.vue'
+    import PreferencesComponent from './GameComponents/PreferencesComponent.vue'
     export default {
         name: 'GameComponent',
         data() {
@@ -72,24 +57,28 @@
                 {num: 1, selected: false, sign: '', winner: false},
                 {num: 2, selected: false, sign: '', winner: false},
                 {num: 3, selected: false, sign: '', winner: false},
+
                 {num: 4, selected: false, sign: '', winner: false},
                 {num: 5, selected: false, sign: '', winner: false},
                 {num: 6, selected: false, sign: '', winner: false},
+
                 {num: 7, selected: false, sign: '', winner: false},
                 {num: 8, selected: false, sign: '', winner: false},
                 {num: 9, selected: false, sign: '', winner: false}
             ],
             currentSign: '',
             currentPlayer: '',
-            playerSign: null,
-            PcSign: '',
+            playerSign: this.PreferencesComponent.playerSign,
+            PcSign: this.PreferencesComponent.pcSign,
             //playMode: 'PC',
+
             selectedCells: [],
             computerPossibleChoices: [],
             winner: '',
             gameOn: false,
           }
         },
+
         methods: {
           //le tour du player!
           userTurn(index)
@@ -104,17 +93,20 @@
             }
             this.hasGameEnded();
           },
+
           //le tour de l'ordi
           computerTurn()
           {
               if(this.gameOn != false) {
                 let index = Math.floor(Math.random()*this.computerPossibleChoices.length);
+
                 let num = this.computerPossibleChoices[index].num;
                 this.selectCell(num-1);
                 this.flipTurn();
               }
               this.hasGameEnded();
           },
+
           //Selectionner une case
           selectCell(index)
           {
@@ -124,6 +116,9 @@
                 this.addToSelectedCells(index);
               }
           },
+
+
+
           //un array pour garder le history => afin de créer un array de possibiliés restantes pour l'ordi
           addToSelectedCells(index)
           {
@@ -137,16 +132,24 @@
               }
               this.computerPossibleChoices = possibilities;
           },
+
           //switcher le role après chaque tour
           flipTurn()
           {
               this.currentSign == 'X' ? this.currentSign = 'O' : this.currentSign = 'X';
               this.currentPlayer == 'PC' ? this.currentPlayer = 'You' : this.currentPlayer = 'PC';
           },
+
+
+
+
+
+
           //Vérifier si le jeu est terminé (toutes les cases sont remplie ou il y a un gagnant)
           hasGameEnded()
           {
               this.verifyWinner();
+
               if(this.winner == '') {
                 if(this.selectedCells.length == 9) {
                   this.winner = 'draw';
@@ -156,6 +159,7 @@
                 this.emptyAfterEnd();
               }
           },
+
           //A chaque tour une vérification s'il y a du gain
           verifyWinner()
           {
@@ -169,9 +173,11 @@
                 [this.cells[0], this.cells[4], this.cells[8]],
                 [this.cells[2], this.cells[4], this.cells[6]]
               ];
+
               for(let index = 0; index < combos.length; index++) {
                 if(combos[index][0].sign != "" && combos[index][0].sign == combos[index][1].sign && combos[index][0].sign == combos[index][2].sign) {
                   var winnerSign = combos[index][0].sign;
+
                   //les cases gagnantes
                   combos[index][0].winner = true;
                   combos[index][1].winner = true;
@@ -182,16 +188,22 @@
                   } else if(winnerSign == this.pcSign) {
                     this.winner = 'PC';
                   }
+
                   this.emptyAfterEnd();
                 }
               }
           },
+
           //Qui commence???
           firstTurn()
           {
               let random = Math.floor(Math.random()*2);
               random == 1 ? this.currentPlayer = 'You' : this.currentPlayer = 'PC';
           },
+
+
+
+
           //Vider (user actuel et sign actuel) après le gain ou la perte
           emptyAfterEnd()
           {
@@ -199,6 +211,7 @@
               this.currentSign = '';
               this.currentPlayer = '';
           },
+
           //initialiser le board XO
           initialize()
           {
@@ -219,10 +232,12 @@
                 this.currentSign = this.playerSign;
               }
           },
+
           restart()
           {
               this.killAll();
           },
+
           //Vider toutes les variables pour redémmarer
           killAll()
           {
@@ -235,14 +250,18 @@
               this.pcSign = '';
               this.currentSign = '';
           },
-          //L'utilisateur peut choisir X/O avant de lancer le jeu
-          chooseSign(sign)
+
+
+          storeResult()
           {
-              this.playerSign = sign;
-              this.playerSign == 'X' ? this.pcSign = 'O' : this.pcSign = 'X';
-              this.initialize();
-          },
+              axios.post('cells/store', {
+                cellNum: this.cells[index].cell_num,
+                cellSign: this.cells[index].cell_sign,
+                cellSelected: this.cells[index].selected,
+              });
+          }
         },
+
         mounted() {
         }
     }
