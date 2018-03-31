@@ -77,8 +77,6 @@ body {
   position: relative;
   &.tictactoe-logo {
       transform: rotate(-10deg);
-      img {
-      }
   }
   &.alis-logo {
       position: absolute
@@ -99,6 +97,21 @@ body {
     display: flex;
     align-items: center;
     top: 40%;
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .alis-logo {
+    position: relative;
+    top: -15px;
+    left: 100px;
+  }
+
+  .tictactoe-logo {
+    transform: rotate(-10deg);
   }
 }
 

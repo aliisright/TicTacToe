@@ -17,7 +17,6 @@ window.Vue = require('vue');
 
 Vue.component('GameComponent', require('./components/GameComponent.vue'));
 Vue.component('LogoComponent', require('./components/GameComponents/LogoComponent.vue'));
-Vue.component('BoardComponent', require('./components/GameComponents/BoardComponent.vue'));
 
 const app = new Vue({
     el: '#app',

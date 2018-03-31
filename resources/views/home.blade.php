@@ -2,22 +2,15 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Dashboard</div>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+  <div class="d-flex align-items-center justify-content-around">
+    <h1 class="text-white">Bonjour {{Auth::user()->name}}!</h1>
+    <a href="{{ Route('game.index') }}"><button class="btn btn-success">Jouer!</button></a>
+  </div>
 
-                    <a href="{{ Route('game.index') }}"><button class="btn btn-success">Jouer!</button></a>
-                </div>
-            </div>
-        </div>
-    </div>
+
+    <ul class="list-group">
+        <li class="list-group-item list-group-item-warning"></li>
+    </ul>
 </div>
 @endsection
