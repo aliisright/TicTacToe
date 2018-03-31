@@ -1,0 +1,114 @@
+
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+
+// Variables
+@import "variables";
+
+body {
+  background-image: url('http://ak1.picdn.net/shutterstock/videos/6388121/thumb/1.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+
+.text-white {
+  color: white;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-gap: 1em;
+  width: 300px;
+}
+
+.cell {
+  height: 100px;
+  width: 100px;
+  border: 0.5px solid white;
+  border-radius: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+//Board
+.play-zone {
+    height: 100vh;
+
+    .board-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    //Logo
+    .logo-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .info-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+}
+
+.icon-off {
+  opacity: 0.5;
+}
+
+.sign-choice-cell {
+    &:hover {
+      height: 110px;
+      width: 110px;
+    }
+}
+
+.logo-neon {
+  position: relative;
+  &.tictactoe-logo {
+      transform: rotate(-10deg);
+      img {
+      }
+  }
+  &.alis-logo {
+      position: absolute
+  }
+}
+
+.signChoiceBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .signChoiceBox_logo {
+    position: absolute;
+    top: 25%;
+  }
+  .signChoiceBox_choices {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 40%;
+  }
+}
+
+.winner {
+  border: 1px solid rgb(173, 15, 115);
+  box-shadow: 0px 0px 10px rgb(173, 15, 115);
+}
+
+@media screen and (max-width: 980px) {
+  .logo-xo-icons {
+    display: none;
+  }
+}
