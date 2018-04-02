@@ -16,6 +16,7 @@
                   {{ csrf_field() }}
                 </form>
         @endguest
+        <a href="https://github.com/aliisright/TicTacToe"><button class="btn btn-light"><img class="align-baseline" src="{{asset('img/github-icon.png')}}" width="20px"> Find on GitHub</button></a>
       </div>
   </div>
 
@@ -31,5 +32,6 @@
       </div></a>
     </div>
   </div>
+
 </div>
 @endsection

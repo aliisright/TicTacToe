@@ -14,6 +14,7 @@
               <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 {{ csrf_field() }}
               </form>
+        <a href="https://github.com/aliisright/TicTacToe"><button class="btn btn-light"><img class="align-baseline" src="{{asset('img/github-icon.png')}}" width="20px"> Find on GitHub</button></a>
       </div>
   </div>
 
