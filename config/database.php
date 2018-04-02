@@ -6,19 +6,6 @@ $username = $url["b42b93a7cade96"];
 $password = $url["5f4c778c"];
 $database = substr($url["heroku_d7c7bc1722da5d0"], 1);
 
-if ($url = env('mysql://b42b93a7cade96:5f4c778c@eu-cdbr-west-02.cleardb.net/heroku_d7c7bc1722da5d0?reconnect=true', false)) {
-    $parts = parse_url($url);
-    $host = $parts["eu-cdbr-west-02.cleardb.net"];
-    $username = $parts["b42b93a7cade96"];
-    $password = $parts["5f4c778c"];
-    $database = substr($parts["heroku_d7c7bc1722da5d0"], 1);
-} else {
-    $host = env('DB_HOST', 'localhost');
-    $username = env('DB_USERNAME', 'forge');
-    $password = env('DB_PASSWORD', '');
-    $database = env('DB_DATABASE', 'forge');
-}
-
 return [
 
     /*
