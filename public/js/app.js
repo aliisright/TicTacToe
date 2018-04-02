@@ -47375,38 +47375,73 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'GameComponent',
+  components: {
+    LogoComponent: __WEBPACK_IMPORTED_MODULE_0__GameComponents_LogoComponent_vue___default.a
+  },
   data: function data() {
     return {
-      cells: [{ num: 1, selected: false, sign: '', winner: false }, { num: 2, selected: false, sign: '', winner: false }, { num: 3, selected: false, sign: '', winner: false }, { num: 4, selected: false, sign: '', winner: false }, { num: 5, selected: false, sign: '', winner: false }, { num: 6, selected: false, sign: '', winner: false }, { num: 7, selected: false, sign: '', winner: false }, { num: 8, selected: false, sign: '', winner: false }, { num: 9, selected: false, sign: '', winner: false }],
-      currentSign: '',
-      currentPlayer: '',
+      user: null,
+      connected: false,
+      game: null,
+      cells: [],
+      currentSign: null,
+      currentPlayer: null,
       playerSign: null,
-      PcSign: '',
-      //playMode: 'PC',
+      otherSign: null,
       selectedCells: [],
       computerPossibleChoices: [],
-      winner: '',
-      gameOn: false
+      winner: null,
+      gameOn: false,
+      playMode: null,
+      player2: '',
+      p2IsSet: false
     };
   },
+
 
   methods: {
     //le tour du player!
     userTurn: function userTurn(index) {
-      if (this.gameOn != false) {
+      if (this.gameOn != false && !this.cells[index].selected) {
         this.selectCell(index);
         this.flipTurn();
         this.hasGameEnded();
-        if (this.gameOn != false) {
+        if (this.gameOn != false && this.playMode == 'PC') {
           this.computerTurn();
         }
       }
       this.hasGameEnded();
     },
+
 
     //le tour de l'ordi
     computerTurn: function computerTurn() {
@@ -47419,14 +47454,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.hasGameEnded();
     },
 
+
     //Selectionner une case
     selectCell: function selectCell(index) {
       if (this.cells[index].selected != true) {
         this.cells[index].selected = true;
         this.cells[index].sign = this.currentSign;
         this.addToSelectedCells(index);
+
+        axios.post('/cells/update', {
+          id: this.cells[index].id,
+          sign: this.cells[index].sign
+        });
       }
     },
+
 
     //un array pour garder le history => afin de créer un array de possibiliés restantes pour l'ordi
     addToSelectedCells: function addToSelectedCells(index) {
@@ -47441,27 +47483,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.computerPossibleChoices = possibilities;
     },
 
+
     //switcher le role après chaque tour
     flipTurn: function flipTurn() {
       this.currentSign == 'X' ? this.currentSign = 'O' : this.currentSign = 'X';
-      this.currentPlayer == 'PC' ? this.currentPlayer = 'You' : this.currentPlayer = 'PC';
+      if (this.playMode == 'PC') {
+        this.currentPlayer == 'PC' ? this.currentPlayer = this.user.name : this.currentPlayer = 'PC';
+      } else if (this.playMode == '2P') {
+        this.currentPlayer == this.player2 ? this.currentPlayer = this.user.name : this.currentPlayer = this.player2;
+      }
     },
+
 
     //Vérifier si le jeu est terminé (toutes les cases sont remplie ou il y a un gagnant)
     hasGameEnded: function hasGameEnded() {
       this.verifyWinner();
-      if (this.winner == '') {
+      if (!this.winner) {
         if (this.selectedCells.length == 9) {
           this.winner = 'draw';
           this.emptyAfterEnd();
+          this.saveWinner();
         }
-      } else {
-        this.emptyAfterEnd();
       }
     },
 
+
     //A chaque tour une vérification s'il y a du gain
     verifyWinner: function verifyWinner() {
+      //Les trio gagnants
       var combos = [[this.cells[0], this.cells[1], this.cells[2]], [this.cells[3], this.cells[4], this.cells[5]], [this.cells[6], this.cells[7], this.cells[8]], [this.cells[0], this.cells[3], this.cells[6]], [this.cells[1], this.cells[4], this.cells[7]], [this.cells[2], this.cells[5], this.cells[8]], [this.cells[0], this.cells[4], this.cells[8]], [this.cells[2], this.cells[4], this.cells[6]]];
       for (var index = 0; index < combos.length; index++) {
         if (combos[index][0].sign != "" && combos[index][0].sign == combos[index][1].sign && combos[index][0].sign == combos[index][2].sign) {
@@ -47472,20 +47521,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           combos[index][2].winner = true;
           //qui a gagné?
           if (winnerSign == this.playerSign) {
-            this.winner = 'You';
-          } else if (winnerSign == this.pcSign) {
-            this.winner = 'PC';
+            this.winner = this.user.name;
+          } else if (winnerSign == this.otherSign) {
+            this.playMode == 'PC' ? this.winner = 'PC' : this.winner = this.player2;
           }
           this.emptyAfterEnd();
+          this.saveWinner();
         }
       }
     },
 
+
     //Qui commence???
     firstTurn: function firstTurn() {
       var random = Math.floor(Math.random() * 2);
-      random == 1 ? this.currentPlayer = 'You' : this.currentPlayer = 'PC';
+      random == 1 ? this.currentPlayer = this.user.name : this.playMode == 'PC' ? this.currentPlayer = 'PC' : this.currentPlayer = this.player2;
     },
+
 
     //Vider (user actuel et sign actuel) après le gain ou la perte
     emptyAfterEnd: function emptyAfterEnd() {
@@ -47494,28 +47546,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.currentPlayer = '';
     },
 
+
     //initialiser le board XO
-    initialize: function initialize() {
-      for (var cell in this.cells) {
-        this.cells[cell].selected = false;
-        this.cells[cell].sign = '';
-        this.cells[cell].winner = false;
-      }
+    initializeBoard: function initializeBoard() {
       this.winner = '';
       this.gameOn = true;
       this.computerPossibleChoices = this.cells;
       this.selectedCells = [];
       this.firstTurn();
       if (this.currentPlayer == 'PC') {
-        this.currentSign = this.pcSign;
+        this.currentSign = this.otherSign;
         this.computerTurn();
       } else {
         this.currentSign = this.playerSign;
       }
     },
-    restart: function restart() {
-      this.killAll();
+
+
+    //L'utilisateur peut choisir X/O avant de lancer le jeu
+    chooseSign: function chooseSign(sign) {
+      if (this.connected && this.user && this.game) {
+        this.playerSign = sign;
+        this.playerSign == 'X' ? this.otherSign = 'O' : this.otherSign = 'X';
+        this.initializeBoard();
+      }
     },
+
+
+    //choix de mode de jeu 2 joueur ou contre l'ordi
+    setPlayMode: function setPlayMode(mode) {
+      this.playMode = mode;
+      if (mode == 'PC') {
+        this.setPlayer2Name();
+      }
+    },
+
 
     //Vider toutes les variables pour redémmarer
     killAll: function killAll() {
@@ -47525,18 +47590,50 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.selectedCells = [];
       this.currentPlayer = '';
       this.playerSign = '';
-      this.pcSign = '';
+      this.otherSign = '';
       this.currentSign = '';
     },
 
-    //L'utilisateur peut choisir X/O avant de lancer le jeu
-    chooseSign: function chooseSign(sign) {
-      this.playerSign = sign;
-      this.playerSign == 'X' ? this.pcSign = 'O' : this.pcSign = 'X';
-      this.initialize();
+
+    //Créer un nouveau board + récuperer le board
+    newRound: function newRound() {
+      var _this = this;
+
+      this.killAll();
+      axios.get('game/new').then(function (res) {
+        _this.user = res.data.user, _this.connected = res.data.connected, _this.game = res.data.game, _this.cells = res.data.cells;
+      });
+    },
+    saveWinner: function saveWinner() {
+      if (this.winner == this.user.name) {
+        axios.post('/game/winner', {
+          id: this.game.id,
+          mode: this.playMode,
+          against: this.player2,
+          won: true
+        });
+      } else {
+        axios.post('/game/winner', {
+          id: this.game.id,
+          mode: this.playMode,
+          against: this.player2,
+          won: false
+        });
+      }
+    },
+    newGame: function newGame() {
+      player2: '';
+      playMode: null;
+      p2IsSet: false;
+      this.newRound();
+    },
+    setPlayer2Name: function setPlayer2Name() {
+      this.p2IsSet = true;
     }
   },
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    this.newRound();
+  }
 });
 
 /***/ }),
@@ -47904,8 +48001,8 @@ var render = function() {
           {
             name: "show",
             rawName: "v-show",
-            value: !_vm.playerSign,
-            expression: "!playerSign"
+            value: !_vm.playerSign || !_vm.playMode,
+            expression: "!playerSign || !playMode"
           }
         ],
         staticClass: "signChoiceBox"
@@ -47913,37 +48010,153 @@ var render = function() {
       [
         _vm._m(0),
         _vm._v(" "),
-        _c("div", { staticClass: "signChoiceBox_choices" }, [
-          _c(
-            "div",
-            {
-              staticClass: "sign-choice-cell cell",
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.chooseSign("X")
-                }
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.playMode == "2P" && !_vm.p2IsSet,
+                expression: "playMode == '2P' && !p2IsSet"
               }
-            },
-            [_c("img", { attrs: { src: "img/x-icon.png", width: "100px" } })]
-          ),
-          _vm._v(" "),
-          _c("h2", { staticClass: "mx-3" }, [_vm._v("ou")]),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "sign-choice-cell cell",
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.chooseSign("O")
+            ],
+            staticClass: "signChoiceBox_choices"
+          },
+          [
+            _c("div", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.player2,
+                    expression: "player2"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { placeholder: "nom du 2e joueur" },
+                domProps: { value: _vm.player2 },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.player2 = $event.target.value
+                  }
                 }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-warning ml-2",
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.setPlayer2Name()
+                    }
+                  }
+                },
+                [_vm._v("valider")]
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.playMode,
+                expression: "!playMode"
               }
-            },
-            [_c("img", { attrs: { src: "img/o-icon.png", width: "100px" } })]
-          )
-        ])
+            ],
+            staticClass: "signChoiceBox_choices"
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "sign-choice-cell cell",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.setPlayMode("2P")
+                  }
+                }
+              },
+              [_vm._v("\n         2 joueurs\n      ")]
+            ),
+            _vm._v(" "),
+            _c("h2", { staticClass: "mx-3" }, [_vm._v("ou")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "sign-choice-cell cell",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.setPlayMode("PC")
+                  }
+                }
+              },
+              [_vm._v("\n          contre le PC\n      ")]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.playerSign && _vm.playMode && _vm.p2IsSet,
+                expression: "!playerSign && playMode && p2IsSet"
+              }
+            ],
+            staticClass: "signChoiceBox_choices"
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "sign-choice-cell cell",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.chooseSign("X")
+                  }
+                }
+              },
+              [_c("img", { attrs: { src: "img/x-icon.png", width: "100px" } })]
+            ),
+            _vm._v(" "),
+            _c("h2", { staticClass: "mx-3" }, [_vm._v("ou")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "sign-choice-cell cell",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.chooseSign("O")
+                  }
+                }
+              },
+              [_c("img", { attrs: { src: "img/o-icon.png", width: "100px" } })]
+            )
+          ]
+        )
       ]
     ),
     _vm._v(" "),
@@ -47975,57 +48188,67 @@ var render = function() {
               {
                 name: "show",
                 rawName: "v-show",
-                value: _vm.playerSign,
-                expression: "playerSign"
+                value: _vm.playerSign && _vm.playMode,
+                expression: "playerSign && playMode"
               }
             ],
             staticClass: "info-section col-md-4 text-center"
           },
           [
+            _c(
+              "div",
+              {
+                staticStyle: {
+                  border: "4px solid yellow",
+                  "border-radius": "50px",
+                  padding: "10px"
+                }
+              },
+              [
+                _vm.playMode == "2P"
+                  ? _c("h1", [
+                      _vm._v(
+                        _vm._s(_vm.user.name) + " vs " + _vm._s(_vm.player2)
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.playMode == "PC"
+                  ? _c("h1", [_vm._v(_vm._s(_vm.user.name) + " vs XO-3000")])
+                  : _vm._e()
+              ]
+            ),
+            _vm._v(" "),
             _c("div", [
-              _vm.winner == "You"
-                ? _c("h1", [_vm._v("Bravo! t'as gagné")])
+              _vm.winner == this.user.name && _vm.user.name
+                ? _c("h1", [
+                    _vm._v("Bravo " + _vm._s(_vm.user.name) + "! t'as gagné")
+                  ])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.winner == "PC"
+              _vm.playMode == "PC" && _vm.winner == "PC"
                 ? _c("h1", [_vm._v("XO-3000 a gagné!")])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.playMode == "2P" && _vm.winner == this.player2
+                ? _c("h1", [_vm._v(_vm._s(this.player2) + " a gagné!")])
                 : _vm._e(),
               _vm._v(" "),
               _vm.winner == "draw"
                 ? _c("h1", [_vm._v(":/ pas de gagnant!")])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.currentPlayer == "You"
-                ? _c("p", [
-                    _vm._v("\n          A toi! c'est ton tour | "),
-                    _c("img", {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.currentSign == "X",
-                          expression: "currentSign == 'X'"
-                        }
-                      ],
-                      attrs: { src: "img/x-icon.png", width: "30px" }
-                    }),
-                    _c("img", {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.currentSign == "O",
-                          expression: "currentSign == 'O'"
-                        }
-                      ],
-                      attrs: { src: "img/o-icon.png", width: "30px" }
-                    })
-                  ])
+              _vm.game.id
+                ? _c("p", [_vm._v("Partie N°" + _vm._s(_vm.game.id))])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.currentPlayer == "PC"
+              !_vm.winner
                 ? _c("p", [
-                    _vm._v("\n          XO-3000 joue | "),
+                    _vm._v(
+                      "\n          Le tour de " +
+                        _vm._s(_vm.currentPlayer) +
+                        " | "
+                    ),
                     _c("img", {
                       directives: [
                         {
@@ -48058,12 +48281,27 @@ var render = function() {
                   on: {
                     click: function($event) {
                       $event.preventDefault()
-                      _vm.restart()
+                      _vm.newRound()
                     }
                   }
                 },
-                [_vm._v("Relancer")]
-              )
+                [_vm._v("Nouvelle partie")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-warning",
+                  on: {
+                    click: function($event) {
+                      this.location.reload()
+                    }
+                  }
+                },
+                [_vm._v("Réinitialiser")]
+              ),
+              _vm._v(" "),
+              _vm._m(1)
             ])
           ]
         ),
@@ -48131,6 +48369,14 @@ var staticRenderFns = [
       _c("div", { staticClass: "logo-neon tictactoe-logo" }, [
         _c("img", { attrs: { src: "img/tictactoe-icon.png", width: "300px" } })
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("a", { attrs: { href: "/home" } }, [
+      _c("button", { staticClass: "btn btn-danger" }, [_vm._v("Quitter")])
     ])
   }
 ]
