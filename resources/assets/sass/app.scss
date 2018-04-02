@@ -6,7 +6,7 @@
 @import "variables";
 
 body {
-  background-image: url('http://ak1.picdn.net/shutterstock/videos/6388121/thumb/1.jpg');
+  background-image: url('../img/background.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
@@ -17,6 +17,21 @@ body {
   color: black;
 }
 
+.text-white {
+  color: white;
+}
+
+.link {
+  color: inherit;
+  &:hover {
+    color:inherit;
+    text-decoration: none;
+    text-shadow: 0px 0px 5px white;
+  }
+}
+
+
+//Board
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -36,7 +51,6 @@ body {
   align-items: center;
 }
 
-//Board
 .play-zone {
     height: 100vh;
 
@@ -74,16 +88,6 @@ body {
     }
 }
 
-.logo-neon {
-  position: relative;
-  &.tictactoe-logo {
-      transform: rotate(-10deg);
-  }
-  &.alis-logo {
-      position: absolute
-  }
-}
-
 .signChoiceBox {
   display: flex;
   align-items: center;
@@ -105,15 +109,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  .alis-logo {
-    position: relative;
-    top: -15px;
-    left: 100px;
-  }
-
-  .tictactoe-logo {
-    transform: rotate(-10deg);
-  }
 }
 
 .vs_phrase {
@@ -122,12 +117,19 @@ body {
   padding:10px;
 }
 
+.winner {
+  border: 1px solid rgb(173, 15, 115);
+  box-shadow: 0px 0px 10px rgb(173, 15, 115);
+}
+
+//Home and HomePage
 .homepage-box {
   h1 {
     font-size: 50px;
   }
 
-  height: 300px;
+  height: 270px;
+  width: 270px;
   border: 0.5px solid white;
   border-radius: 20px;
 
@@ -137,15 +139,13 @@ body {
   text-align: center;
 }
 
-.winner {
-  border: 1px solid rgb(173, 15, 115);
-  box-shadow: 0px 0px 10px rgb(173, 15, 115);
-}
-
 .histoy-list {
   overflow: scroll;
+  height: 270px;
 }
 
+
+//Media queries
 @media screen and (max-width: 980px) {
   .logo-xo-icons {
     display: none;

@@ -15,12 +15,6 @@ class GameController extends Controller
         return view('game.index');
     }
 
-    public function browse()
-    {
-        $games = Auth::user()->games()->get();
-        return view('game.browse', ['games' => $gammes]);
-    }
-
     public function newGame()
     {
         $newGame = Game::create([
@@ -55,7 +49,7 @@ class GameController extends Controller
 
         return ['user' => $user, 'connected' => $connected, 'game' => $game, 'cells' => $cells];
     }
-    
+
     public function setWinner(Request $request)
     {
         $game = Game::find($request->input('id'));
@@ -64,4 +58,26 @@ class GameController extends Controller
         $game->mode = $request->input('mode');
         $game->update();
     }
+
+    //Historique
+    public function getHistory()
+    {
+        $games = Auth::user()->games()->orderBy('created_at', 'desc')->get();
+
+        $gameWins = Game::where('won', true)->get();
+        $gameLoses = Game::where('won', false)->get();
+
+        return view('history', ['games' => $games, 'gameWins' => $gameWins, 'gameLoses' => $gameLoses]);
+    }
+
+    public function destroyHistory()
+    {
+        $games = Auth::user()->games()->get();
+        foreach ($games as $game) {
+          $game->delete();
+        }
+
+        return redirect()->back();
+    }
+
 }

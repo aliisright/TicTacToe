@@ -1,4 +1,4 @@
-<?php
+->onDelete('cascade')<?php
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,7 +15,7 @@ class AddForeignKeyToGamesTable extends Migration
     {
         Schema::table('games', function (Blueprint $table) {
             $table->integer('user_id')->unsigned()->index()->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

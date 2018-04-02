@@ -3,12 +3,7 @@
       <!-- Préférences -->
       <div class="signChoiceBox" v-show="!playerSign || !playMode">
         <div class="signChoiceBox_logo">
-            <div class="logo-neon alis-logo">
-              <img src="img/alis-icon.png" width="100px">
-            </div>
-            <div class="logo-neon tictactoe-logo">
-              <img src="img/tictactoe-icon.png" width="300px">
-            </div>
+            <img src="img/logo.png" width="300px">
         </div>
         <div class="signChoiceBox_choices" v-show="playMode == '2P' && !p2IsSet">
           <div>
@@ -62,7 +57,8 @@
 
             <button class="btn btn-warning" @click.prevent="newRound()">Nouvelle partie</button>
             <button class="btn btn-warning" @click="this.location.reload()">Réinitialiser</button>
-            <a href="/home"><button class="btn btn-danger">Quitter</button></a>
+            <a v-if="connected" href="/home"><button class="btn btn-danger">Quitter</button></a>
+            <a v-if="!connected" href="/"><button class="btn btn-danger">Quitter</button></a>
           </div>
 
         </div>
@@ -96,7 +92,9 @@
         },
         data() {
           return {
-            user: null,
+            user: {
+              name: '',
+            },
             connected: false,
             game: null,
             cells: [],
@@ -109,7 +107,7 @@
             winner: null,
             gameOn: false,
             playMode: null,
-            player2: '',
+            player2: 'Player2',
             p2IsSet: false
           }
         },
@@ -150,10 +148,12 @@
                 this.cells[index].sign = this.currentSign;
                 this.addToSelectedCells(index);
 
-                axios.post('/cells/update', {
-                    id: this.cells[index].id,
-                    sign: this.cells[index].sign
-                });
+                if(this.connected) {
+                  axios.post('/cells/update', {
+                      id: this.cells[index].id,
+                      sign: this.cells[index].sign
+                  });
+                }
               }
           },
 
@@ -266,12 +266,9 @@
           //L'utilisateur peut choisir X/O avant de lancer le jeu
           chooseSign(sign)
           {
-              if(this.connected && this.user && this.game)
-              {
-                this.playerSign = sign;
-                this.playerSign == 'X' ? this.otherSign = 'O' : this.otherSign = 'X';
-                this.initializeBoard();
-              }
+              this.playerSign = sign;
+              this.playerSign == 'X' ? this.otherSign = 'O' : this.otherSign = 'X';
+              this.initializeBoard();
           },
 
           //choix de mode de jeu 2 joueur ou contre l'ordi
@@ -299,31 +296,42 @@
           //Créer un nouveau board + récuperer le board
           newRound()
           {
-            this.killAll()
-            axios.get('game/new').then((res) => {
-              this.user = res.data.user,
-              this.connected = res.data.connected,
-              this.game = res.data.game,
-              this.cells = res.data.cells
-            });
+            this.killAll();
+            if(window.location.pathname == '/test') {
+              axios.get('/test/get').then((res) => {
+                this.cells = res.data.cells
+              });
+              this.user.name = 'Mr.Who';
+              this.connected = false;
+              this.game = {};
+            } else if(window.location.pathname == '/game') {
+              axios.get('/game/new').then((res) => {
+                this.user = res.data.user,
+                this.connected = res.data.connected,
+                this.game = res.data.game,
+                this.cells = res.data.cells
+              });
+            }
           },
 
           saveWinner()
           {
-            if(this.winner == this.user.name) {
-              axios.post('/game/winner', {
-                id: this.game.id,
-                mode: this.playMode,
-                against: this.player2,
-                won: true
-              });
-            } else {
-              axios.post('/game/winner', {
-                id: this.game.id,
-                mode: this.playMode,
-                against: this.player2,
-                won: false
-              });
+            if(this.connected) {
+              if(this.winner == this.user.name) {
+                axios.post('/game/winner', {
+                  id: this.game.id,
+                  mode: this.playMode,
+                  against: this.player2,
+                  won: true
+                });
+              } else {
+                axios.post('/game/winner', {
+                  id: this.game.id,
+                  mode: this.playMode,
+                  against: this.player2,
+                  won: false
+                });
+              }
             }
           },
 

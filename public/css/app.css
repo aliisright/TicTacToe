@@ -1,5 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);body {
-  background-image: url("http://ak1.picdn.net/shutterstock/videos/6388121/thumb/1.jpg");
+  background-image: url(/images/background.jpg?1fd803032a95a4ee57046a8b11d46675);
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
@@ -8,6 +8,20 @@
 
 .text-black {
   color: black;
+}
+
+.text-white {
+  color: white;
+}
+
+.link {
+  color: inherit;
+}
+
+.link:hover {
+  color: inherit;
+  text-decoration: none;
+  text-shadow: 0px 0px 5px white;
 }
 
 .grid {
@@ -95,19 +109,6 @@
   width: 110px;
 }
 
-.logo-neon {
-  position: relative;
-}
-
-.logo-neon.tictactoe-logo {
-  -webkit-transform: rotate(-10deg);
-          transform: rotate(-10deg);
-}
-
-.logo-neon.alis-logo {
-  position: absolute;
-}
-
 .signChoiceBox {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -148,25 +149,21 @@
           justify-content: center;
 }
 
-.logo .alis-logo {
-  position: relative;
-  top: -15px;
-  left: 100px;
-}
-
-.logo .tictactoe-logo {
-  -webkit-transform: rotate(-10deg);
-          transform: rotate(-10deg);
-}
-
 .vs_phrase {
   border: 4px solid yellow;
   border-radius: 50px;
   padding: 10px;
 }
 
+.winner {
+  border: 1px solid #ad0f73;
+  -webkit-box-shadow: 0px 0px 10px #ad0f73;
+          box-shadow: 0px 0px 10px #ad0f73;
+}
+
 .homepage-box {
-  height: 300px;
+  height: 270px;
+  width: 270px;
   border: 0.5px solid white;
   border-radius: 20px;
   display: -webkit-box;
@@ -185,14 +182,9 @@
   font-size: 50px;
 }
 
-.winner {
-  border: 1px solid #ad0f73;
-  -webkit-box-shadow: 0px 0px 10px #ad0f73;
-          box-shadow: 0px 0px 10px #ad0f73;
-}
-
 .histoy-list {
   overflow: scroll;
+  height: 270px;
 }
 
 @media screen and (max-width: 980px) {

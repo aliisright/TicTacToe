@@ -47396,10 +47396,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -47409,7 +47405,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   data: function data() {
     return {
-      user: null,
+      user: {
+        name: ''
+      },
       connected: false,
       game: null,
       cells: [],
@@ -47422,7 +47420,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       winner: null,
       gameOn: false,
       playMode: null,
-      player2: '',
+      player2: 'Player2',
       p2IsSet: false
     };
   },
@@ -47462,10 +47460,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.cells[index].sign = this.currentSign;
         this.addToSelectedCells(index);
 
-        axios.post('/cells/update', {
-          id: this.cells[index].id,
-          sign: this.cells[index].sign
-        });
+        if (this.connected) {
+          axios.post('/cells/update', {
+            id: this.cells[index].id,
+            sign: this.cells[index].sign
+          });
+        }
       }
     },
 
@@ -47565,11 +47565,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     //L'utilisateur peut choisir X/O avant de lancer le jeu
     chooseSign: function chooseSign(sign) {
-      if (this.connected && this.user && this.game) {
-        this.playerSign = sign;
-        this.playerSign == 'X' ? this.otherSign = 'O' : this.otherSign = 'X';
-        this.initializeBoard();
-      }
+      this.playerSign = sign;
+      this.playerSign == 'X' ? this.otherSign = 'O' : this.otherSign = 'X';
+      this.initializeBoard();
     },
 
 
@@ -47600,25 +47598,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var _this = this;
 
       this.killAll();
-      axios.get('game/new').then(function (res) {
-        _this.user = res.data.user, _this.connected = res.data.connected, _this.game = res.data.game, _this.cells = res.data.cells;
-      });
+      if (window.location.pathname == '/test') {
+        axios.get('/test/get').then(function (res) {
+          _this.cells = res.data.cells;
+        });
+        this.user.name = 'Mr.Who';
+        this.connected = false;
+        this.game = {};
+      } else if (window.location.pathname == '/game') {
+        axios.get('/game/new').then(function (res) {
+          _this.user = res.data.user, _this.connected = res.data.connected, _this.game = res.data.game, _this.cells = res.data.cells;
+        });
+      }
     },
     saveWinner: function saveWinner() {
-      if (this.winner == this.user.name) {
-        axios.post('/game/winner', {
-          id: this.game.id,
-          mode: this.playMode,
-          against: this.player2,
-          won: true
-        });
-      } else {
-        axios.post('/game/winner', {
-          id: this.game.id,
-          mode: this.playMode,
-          against: this.player2,
-          won: false
-        });
+      if (this.connected) {
+        if (this.winner == this.user.name) {
+          axios.post('/game/winner', {
+            id: this.game.id,
+            mode: this.playMode,
+            against: this.player2,
+            won: true
+          });
+        } else {
+          axios.post('/game/winner', {
+            id: this.game.id,
+            mode: this.playMode,
+            against: this.player2,
+            won: false
+          });
+        }
       }
     },
     newGame: function newGame() {
@@ -47642,9 +47651,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
 //
 //
 //
@@ -47714,8 +47720,6 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _vm._m(0),
-    _vm._v(" "),
-    _vm._m(1),
     _vm._v(" "),
     _c("div", { staticClass: "logo-neon logo-xo-icons" }, [
       _c("img", {
@@ -47964,15 +47968,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "logo-neon alis-logo" }, [
-      _c("img", { attrs: { src: "img/alis-icon.png", width: "100px" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "logo-neon tictactoe-logo" }, [
-      _c("img", { attrs: { src: "img/tictactoe-icon.png", width: "300px" } })
+      _c("img", { attrs: { src: "img/logo.png", width: "300px" } })
     ])
   }
 ]
@@ -48289,7 +48285,21 @@ var render = function() {
                 [_vm._v("Réinitialiser")]
               ),
               _vm._v(" "),
-              _vm._m(1)
+              _vm.connected
+                ? _c("a", { attrs: { href: "/home" } }, [
+                    _c("button", { staticClass: "btn btn-danger" }, [
+                      _vm._v("Quitter")
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              !_vm.connected
+                ? _c("a", { attrs: { href: "/" } }, [
+                    _c("button", { staticClass: "btn btn-danger" }, [
+                      _vm._v("Quitter")
+                    ])
+                  ])
+                : _vm._e()
             ])
           ]
         ),
@@ -48350,21 +48360,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "signChoiceBox_logo" }, [
-      _c("div", { staticClass: "logo-neon alis-logo" }, [
-        _c("img", { attrs: { src: "img/alis-icon.png", width: "100px" } })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "logo-neon tictactoe-logo" }, [
-        _c("img", { attrs: { src: "img/tictactoe-icon.png", width: "300px" } })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("a", { attrs: { href: "/home" } }, [
-      _c("button", { staticClass: "btn btn-danger" }, [_vm._v("Quitter")])
+      _c("img", { attrs: { src: "img/logo.png", width: "300px" } })
     ])
   }
 ]

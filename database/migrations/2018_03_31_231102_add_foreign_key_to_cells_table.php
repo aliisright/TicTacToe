@@ -15,7 +15,7 @@ class AddForeignKeyToCellsTable extends Migration
     {
         Schema::table('cells', function (Blueprint $table) {
             $table->integer('game_id')->unsigned()->index()->nullable();
-            $table->foreign('game_id')->references('id')->on('games');
+            $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');
         });
     }
 
