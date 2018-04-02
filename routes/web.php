@@ -22,10 +22,7 @@
   Route::get('/game', 'GameController@index')->name('game.index')->middleware('auth');
   Route::get('/game/new', 'GameController@newGame')->name('game.new')->middleware('auth');
   Route::get('/game/api/getGame/{id}', 'GameController@apiGetGame')->name('game.apiGetGame')->middleware('auth');
-
   Route::get('/game/browse', 'GameController@browse')->name('game.browse')->middleware('auth');
   Route::post('/game/winner', 'GameController@setWinner')->name('game.winner')->middleware('auth');
 
-  Route::post('/cells/update', 'CellController@update')->name('cells.update');
-
-  Route::get('/history/store', 'GameHistoryController@store')->name('history.store')->middleware('auth');
+  Route::post('/cells/update', 'CellController@update')->name('cells.update')->middleware('auth');

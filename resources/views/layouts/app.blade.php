@@ -24,28 +24,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-        @if (!\Request::is('game'))
-          <div class="row">
-            <nav class="col-md-3">
-              <ul>
-                  @guest
-                    <a href="{{Route('login')}}"><li>Connexion</li></a>
-                    <a href="{{Route('register')}}"><li>Inscription</li></a>
-                  @else
-                    <a href="{{Route('game.index')}}"><li>Jouer</li></a>
-                    <a href="{{Route('home')}}"><li>Mon profile</li></a>
-                  @endguest
-              </ul>
-            </nav>
-
-            <main class="col-md-9">
-                @yield('content')
-            </main>
-          </div>
-        @else
           <main>
               @yield('content')
           </main>
-        @endif
 </body>
 </html>

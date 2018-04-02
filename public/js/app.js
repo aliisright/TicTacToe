@@ -47993,7 +47993,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "text-white" }, [
+  return _c("div", [
     _c(
       "div",
       {
@@ -48195,29 +48195,17 @@ var render = function() {
             staticClass: "info-section col-md-4 text-center"
           },
           [
-            _c(
-              "div",
-              {
-                staticStyle: {
-                  border: "4px solid yellow",
-                  "border-radius": "50px",
-                  padding: "10px"
-                }
-              },
-              [
-                _vm.playMode == "2P"
-                  ? _c("h1", [
-                      _vm._v(
-                        _vm._s(_vm.user.name) + " vs " + _vm._s(_vm.player2)
-                      )
-                    ])
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.playMode == "PC"
-                  ? _c("h1", [_vm._v(_vm._s(_vm.user.name) + " vs XO-3000")])
-                  : _vm._e()
-              ]
-            ),
+            _c("div", { staticClass: "vs_phrase" }, [
+              _vm.playMode == "2P"
+                ? _c("h1", [
+                    _vm._v(_vm._s(_vm.user.name) + " vs " + _vm._s(_vm.player2))
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.playMode == "PC"
+                ? _c("h1", [_vm._v(_vm._s(_vm.user.name) + " vs XO-3000")])
+                : _vm._e()
+            ]),
             _vm._v(" "),
             _c("div", [
               _vm.winner == this.user.name && _vm.user.name

@@ -1,5 +1,5 @@
 <template>
-    <div class="text-white">
+    <div>
       <!-- Préférences -->
       <div class="signChoiceBox" v-show="!playerSign || !playMode">
         <div class="signChoiceBox_logo">
@@ -46,7 +46,7 @@
 
         <!-- Information box -->
         <div class="info-section col-md-4 text-center" v-show="playerSign && playMode">
-          <div style="border: 4px solid yellow; border-radius:50px; padding:10px">
+          <div class="vs_phrase">
             <h1 v-if="playMode == '2P'">{{user.name}} vs {{player2}}</h1>
             <h1 v-if="playMode == 'PC'">{{user.name}} vs XO-3000</h1>
           </div>
