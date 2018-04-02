@@ -1,11 +1,10 @@
 <?php
 
-$url = parse_url(getenv("mysql://b42b93a7cade96:5f4c778c@eu-cdbr-west-02.cleardb.net/heroku_d7c7bc1722da5d
-0?reconnect=true"));
-$host = $url["host"];
-$username = $url["user"];
-$password = $url["pass"];
-$database = substr($url["path"], 1);
+$url = parse_url(getenv("mysql://b42b93a7cade96:5f4c778c@eu-cdbr-west-02.cleardb.net/heroku_d7c7bc1722da5d0?reconnect=true"));
+$host = $url["eu-cdbr-west-02.cleardb.net"];
+$username = $url["b42b93a7cade96"];
+$password = $url["5f4c778c"];
+$database = substr($url["heroku_d7c7bc1722da5d0"], 1);
 
 return [
 
