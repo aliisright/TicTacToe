@@ -1,10 +1,7 @@
 <template>
   <div>
     <div class="logo-neon alis-logo">
-      <img src="img/alis-icon.png" width="100px">
-    </div>
-    <div class="logo-neon tictactoe-logo">
-      <img src="img/tictactoe-icon.png" width="300px">
+      <img src="img/logo.png" width="300px">
     </div>
     <div class="logo-neon logo-xo-icons">
       <img class="o-logo-icon" v-show="o_icon" src="img/o-icon.png" width="100">

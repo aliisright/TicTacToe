@@ -70,7 +70,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(6);
+var bind = __webpack_require__(5);
 var isBuffer = __webpack_require__(21);
 
 /*global toString:true*/
@@ -424,10 +424,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(8);
+    adapter = __webpack_require__(7);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(8);
+    adapter = __webpack_require__(7);
   }
   return adapter;
 }
@@ -502,119 +502,10 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
-/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3134,7 +3025,7 @@ Popper.Defaults = Defaults;
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -13505,7 +13396,7 @@ return jQuery;
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13523,7 +13414,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 7 */
+/* 6 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -13713,7 +13604,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13724,7 +13615,7 @@ var settle = __webpack_require__(24);
 var buildURL = __webpack_require__(26);
 var parseHeaders = __webpack_require__(27);
 var isURLSameOrigin = __webpack_require__(28);
-var createError = __webpack_require__(9);
+var createError = __webpack_require__(8);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(29);
 
 module.exports = function xhrAdapter(config) {
@@ -13900,7 +13791,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13925,7 +13816,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13937,7 +13828,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13963,11 +13854,120 @@ module.exports = Cancel;
 
 
 /***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(11)
 /* script */
 var __vue_script__ = __webpack_require__(43)
 /* template */
@@ -14014,7 +14014,7 @@ module.exports = Component.exports
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(14);
-module.exports = __webpack_require__(49);
+module.exports = __webpack_require__(46);
 
 
 /***/ }),
@@ -14040,7 +14040,6 @@ window.Vue = __webpack_require__(38);
 
 Vue.component('GameComponent', __webpack_require__(41));
 Vue.component('LogoComponent', __webpack_require__(12));
-Vue.component('BoardComponent', __webpack_require__(46));
 
 var app = new Vue({
   el: '#app',
@@ -14055,7 +14054,7 @@ var app = new Vue({
 
 
 window._ = __webpack_require__(16);
-window.Popper = __webpack_require__(4).default;
+window.Popper = __webpack_require__(3).default;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -14064,7 +14063,7 @@ window.Popper = __webpack_require__(4).default;
  */
 
 try {
-  window.$ = window.jQuery = __webpack_require__(5);
+  window.$ = window.jQuery = __webpack_require__(4);
 
   __webpack_require__(18);
 } catch (e) {}
@@ -31253,7 +31252,7 @@ module.exports = function(module) {
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
-	 true ? factory(exports, __webpack_require__(5), __webpack_require__(4)) :
+	 true ? factory(exports, __webpack_require__(4), __webpack_require__(3)) :
 	typeof define === 'function' && define.amd ? define(['exports', 'jquery', 'popper.js'], factory) :
 	(factory((global.bootstrap = {}),global.jQuery,global.Popper));
 }(this, (function (exports,$,Popper) { 'use strict';
@@ -35157,7 +35156,7 @@ module.exports = __webpack_require__(20);
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(6);
+var bind = __webpack_require__(5);
 var Axios = __webpack_require__(22);
 var defaults = __webpack_require__(2);
 
@@ -35192,9 +35191,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(11);
+axios.Cancel = __webpack_require__(10);
 axios.CancelToken = __webpack_require__(36);
-axios.isCancel = __webpack_require__(10);
+axios.isCancel = __webpack_require__(9);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -35347,7 +35346,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(9);
+var createError = __webpack_require__(8);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -35780,7 +35779,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(33);
-var isCancel = __webpack_require__(10);
+var isCancel = __webpack_require__(9);
 var defaults = __webpack_require__(2);
 var isAbsoluteURL = __webpack_require__(34);
 var combineURLs = __webpack_require__(35);
@@ -35940,7 +35939,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(11);
+var Cancel = __webpack_require__(10);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -47255,14 +47254,14 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(6)))
 
 /***/ }),
 /* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(11)
 /* script */
 var __vue_script__ = __webpack_require__(42)
 /* template */
@@ -47376,23 +47375,53 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'GameComponent',
+  components: {
+    LogoComponent: __WEBPACK_IMPORTED_MODULE_0__GameComponents_LogoComponent_vue___default.a
+  },
   data: function data() {
     return {
-      cells: [{ num: 1, selected: false, sign: '', winner: false }, { num: 2, selected: false, sign: '', winner: false }, { num: 3, selected: false, sign: '', winner: false }, { num: 4, selected: false, sign: '', winner: false }, { num: 5, selected: false, sign: '', winner: false }, { num: 6, selected: false, sign: '', winner: false }, { num: 7, selected: false, sign: '', winner: false }, { num: 8, selected: false, sign: '', winner: false }, { num: 9, selected: false, sign: '', winner: false }],
-      currentSign: '',
-      currentPlayer: '',
+      user: {
+        name: ''
+      },
+      connected: false,
+      game: null,
+      cells: [],
+      currentSign: null,
+      currentPlayer: null,
       playerSign: null,
-      PcSign: '',
-      //playMode: 'PC',
-
+      otherSign: null,
       selectedCells: [],
       computerPossibleChoices: [],
-      winner: '',
-      gameOn: false
+      winner: null,
+      gameOn: false,
+      playMode: null,
+      player2: 'Player2',
+      p2IsSet: false
     };
   },
 
@@ -47400,11 +47429,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   methods: {
     //le tour du player!
     userTurn: function userTurn(index) {
-      if (this.gameOn != false) {
+      if (this.gameOn != false && !this.cells[index].selected) {
         this.selectCell(index);
         this.flipTurn();
         this.hasGameEnded();
-        if (this.gameOn != false) {
+        if (this.gameOn != false && this.playMode == 'PC') {
           this.computerTurn();
         }
       }
@@ -47416,7 +47445,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computerTurn: function computerTurn() {
       if (this.gameOn != false) {
         var index = Math.floor(Math.random() * this.computerPossibleChoices.length);
-
         var num = this.computerPossibleChoices[index].num;
         this.selectCell(num - 1);
         this.flipTurn();
@@ -47431,6 +47459,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.cells[index].selected = true;
         this.cells[index].sign = this.currentSign;
         this.addToSelectedCells(index);
+
+        if (this.connected) {
+          axios.post('/cells/update', {
+            id: this.cells[index].id,
+            sign: this.cells[index].sign
+          });
+        }
       }
     },
 
@@ -47452,45 +47487,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     //switcher le role après chaque tour
     flipTurn: function flipTurn() {
       this.currentSign == 'X' ? this.currentSign = 'O' : this.currentSign = 'X';
-      this.currentPlayer == 'PC' ? this.currentPlayer = 'You' : this.currentPlayer = 'PC';
+      if (this.playMode == 'PC') {
+        this.currentPlayer == 'PC' ? this.currentPlayer = this.user.name : this.currentPlayer = 'PC';
+      } else if (this.playMode == '2P') {
+        this.currentPlayer == this.player2 ? this.currentPlayer = this.user.name : this.currentPlayer = this.player2;
+      }
     },
 
 
     //Vérifier si le jeu est terminé (toutes les cases sont remplie ou il y a un gagnant)
     hasGameEnded: function hasGameEnded() {
       this.verifyWinner();
-
-      if (this.winner == '') {
+      if (!this.winner) {
         if (this.selectedCells.length == 9) {
           this.winner = 'draw';
           this.emptyAfterEnd();
+          this.saveWinner();
         }
-      } else {
-        this.emptyAfterEnd();
       }
     },
 
 
     //A chaque tour une vérification s'il y a du gain
     verifyWinner: function verifyWinner() {
+      //Les trio gagnants
       var combos = [[this.cells[0], this.cells[1], this.cells[2]], [this.cells[3], this.cells[4], this.cells[5]], [this.cells[6], this.cells[7], this.cells[8]], [this.cells[0], this.cells[3], this.cells[6]], [this.cells[1], this.cells[4], this.cells[7]], [this.cells[2], this.cells[5], this.cells[8]], [this.cells[0], this.cells[4], this.cells[8]], [this.cells[2], this.cells[4], this.cells[6]]];
-
       for (var index = 0; index < combos.length; index++) {
         if (combos[index][0].sign != "" && combos[index][0].sign == combos[index][1].sign && combos[index][0].sign == combos[index][2].sign) {
           var winnerSign = combos[index][0].sign;
-
           //les cases gagnantes
           combos[index][0].winner = true;
           combos[index][1].winner = true;
           combos[index][2].winner = true;
           //qui a gagné?
           if (winnerSign == this.playerSign) {
-            this.winner = 'You';
-          } else if (winnerSign == this.pcSign) {
-            this.winner = 'PC';
+            this.winner = this.user.name;
+          } else if (winnerSign == this.otherSign) {
+            this.playMode == 'PC' ? this.winner = 'PC' : this.winner = this.player2;
           }
-
           this.emptyAfterEnd();
+          this.saveWinner();
         }
       }
     },
@@ -47499,7 +47535,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     //Qui commence???
     firstTurn: function firstTurn() {
       var random = Math.floor(Math.random() * 2);
-      random == 1 ? this.currentPlayer = 'You' : this.currentPlayer = 'PC';
+      random == 1 ? this.currentPlayer = this.user.name : this.playMode == 'PC' ? this.currentPlayer = 'PC' : this.currentPlayer = this.player2;
     },
 
 
@@ -47512,26 +47548,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     //initialiser le board XO
-    initialize: function initialize() {
-      for (var cell in this.cells) {
-        this.cells[cell].selected = false;
-        this.cells[cell].sign = '';
-        this.cells[cell].winner = false;
-      }
+    initializeBoard: function initializeBoard() {
       this.winner = '';
       this.gameOn = true;
       this.computerPossibleChoices = this.cells;
       this.selectedCells = [];
       this.firstTurn();
       if (this.currentPlayer == 'PC') {
-        this.currentSign = this.pcSign;
+        this.currentSign = this.otherSign;
         this.computerTurn();
       } else {
         this.currentSign = this.playerSign;
       }
     },
-    restart: function restart() {
-      this.killAll();
+
+
+    //L'utilisateur peut choisir X/O avant de lancer le jeu
+    chooseSign: function chooseSign(sign) {
+      this.playerSign = sign;
+      this.playerSign == 'X' ? this.otherSign = 'O' : this.otherSign = 'X';
+      this.initializeBoard();
+    },
+
+
+    //choix de mode de jeu 2 joueur ou contre l'ordi
+    setPlayMode: function setPlayMode(mode) {
+      this.playMode = mode;
+      if (mode == 'PC') {
+        this.setPlayer2Name();
+      }
     },
 
 
@@ -47543,20 +47588,61 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.selectedCells = [];
       this.currentPlayer = '';
       this.playerSign = '';
-      this.pcSign = '';
+      this.otherSign = '';
       this.currentSign = '';
     },
 
 
-    //L'utilisateur peut choisir X/O avant de lancer le jeu
-    chooseSign: function chooseSign(sign) {
-      this.playerSign = sign;
-      this.playerSign == 'X' ? this.pcSign = 'O' : this.pcSign = 'X';
-      this.initialize();
+    //Créer un nouveau board + récuperer le board
+    newRound: function newRound() {
+      var _this = this;
+
+      this.killAll();
+      if (window.location.pathname == '/test') {
+        axios.get('/test/get').then(function (res) {
+          _this.cells = res.data.cells;
+        });
+        this.user.name = 'Mr.Who';
+        this.connected = false;
+        this.game = {};
+      } else if (window.location.pathname == '/game') {
+        axios.get('/game/new').then(function (res) {
+          _this.user = res.data.user, _this.connected = res.data.connected, _this.game = res.data.game, _this.cells = res.data.cells;
+        });
+      }
+    },
+    saveWinner: function saveWinner() {
+      if (this.connected) {
+        if (this.winner == this.user.name) {
+          axios.post('/game/winner', {
+            id: this.game.id,
+            mode: this.playMode,
+            against: this.player2,
+            won: true
+          });
+        } else {
+          axios.post('/game/winner', {
+            id: this.game.id,
+            mode: this.playMode,
+            against: this.player2,
+            won: false
+          });
+        }
+      }
+    },
+    newGame: function newGame() {
+      player2: '';
+      playMode: null;
+      p2IsSet: false;
+      this.newRound();
+    },
+    setPlayer2Name: function setPlayer2Name() {
+      this.p2IsSet = true;
     }
   },
-
-  mounted: function mounted() {}
+  mounted: function mounted() {
+    this.newRound();
+  }
 });
 
 /***/ }),
@@ -47565,9 +47651,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
 //
 //
 //
@@ -47637,8 +47720,6 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _vm._m(0),
-    _vm._v(" "),
-    _vm._m(1),
     _vm._v(" "),
     _c("div", { staticClass: "logo-neon logo-xo-icons" }, [
       _c("img", {
@@ -47887,15 +47968,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "logo-neon alis-logo" }, [
-      _c("img", { attrs: { src: "img/alis-icon.png", width: "100px" } })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "logo-neon tictactoe-logo" }, [
-      _c("img", { attrs: { src: "img/tictactoe-icon.png", width: "300px" } })
+      _c("img", { attrs: { src: "img/logo.png", width: "300px" } })
     ])
   }
 ]
@@ -47916,7 +47989,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "text-white" }, [
+  return _c("div", [
     _c(
       "div",
       {
@@ -47924,8 +47997,8 @@ var render = function() {
           {
             name: "show",
             rawName: "v-show",
-            value: !_vm.playerSign,
-            expression: "!playerSign"
+            value: !_vm.playerSign || !_vm.playMode,
+            expression: "!playerSign || !playMode"
           }
         ],
         staticClass: "signChoiceBox"
@@ -47933,37 +48006,153 @@ var render = function() {
       [
         _vm._m(0),
         _vm._v(" "),
-        _c("div", { staticClass: "signChoiceBox_choices" }, [
-          _c(
-            "div",
-            {
-              staticClass: "sign-choice-cell cell",
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.chooseSign("X")
-                }
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.playMode == "2P" && !_vm.p2IsSet,
+                expression: "playMode == '2P' && !p2IsSet"
               }
-            },
-            [_c("img", { attrs: { src: "img/x-icon.png", width: "100px" } })]
-          ),
-          _vm._v(" "),
-          _c("h2", { staticClass: "mx-3" }, [_vm._v("ou")]),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "sign-choice-cell cell",
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.chooseSign("O")
+            ],
+            staticClass: "signChoiceBox_choices"
+          },
+          [
+            _c("div", [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.player2,
+                    expression: "player2"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { placeholder: "nom du 2e joueur" },
+                domProps: { value: _vm.player2 },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.player2 = $event.target.value
+                  }
                 }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-warning ml-2",
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.setPlayer2Name()
+                    }
+                  }
+                },
+                [_vm._v("valider")]
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.playMode,
+                expression: "!playMode"
               }
-            },
-            [_c("img", { attrs: { src: "img/o-icon.png", width: "100px" } })]
-          )
-        ])
+            ],
+            staticClass: "signChoiceBox_choices"
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "sign-choice-cell cell",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.setPlayMode("2P")
+                  }
+                }
+              },
+              [_vm._v("\n         2 joueurs\n      ")]
+            ),
+            _vm._v(" "),
+            _c("h2", { staticClass: "mx-3" }, [_vm._v("ou")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "sign-choice-cell cell",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.setPlayMode("PC")
+                  }
+                }
+              },
+              [_vm._v("\n          contre le PC\n      ")]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.playerSign && _vm.playMode && _vm.p2IsSet,
+                expression: "!playerSign && playMode && p2IsSet"
+              }
+            ],
+            staticClass: "signChoiceBox_choices"
+          },
+          [
+            _c(
+              "div",
+              {
+                staticClass: "sign-choice-cell cell",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.chooseSign("X")
+                  }
+                }
+              },
+              [_c("img", { attrs: { src: "img/x-icon.png", width: "100px" } })]
+            ),
+            _vm._v(" "),
+            _c("h2", { staticClass: "mx-3" }, [_vm._v("ou")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "sign-choice-cell cell",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.chooseSign("O")
+                  }
+                }
+              },
+              [_c("img", { attrs: { src: "img/o-icon.png", width: "100px" } })]
+            )
+          ]
+        )
       ]
     ),
     _vm._v(" "),
@@ -47995,57 +48184,55 @@ var render = function() {
               {
                 name: "show",
                 rawName: "v-show",
-                value: _vm.playerSign,
-                expression: "playerSign"
+                value: _vm.playerSign && _vm.playMode,
+                expression: "playerSign && playMode"
               }
             ],
             staticClass: "info-section col-md-4 text-center"
           },
           [
-            _c("div", [
-              _vm.winner == "You"
-                ? _c("h1", [_vm._v("Bravo! t'as gagné")])
+            _c("div", { staticClass: "vs_phrase" }, [
+              _vm.playMode == "2P"
+                ? _c("h1", [
+                    _vm._v(_vm._s(_vm.user.name) + " vs " + _vm._s(_vm.player2))
+                  ])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.winner == "PC"
+              _vm.playMode == "PC"
+                ? _c("h1", [_vm._v(_vm._s(_vm.user.name) + " vs XO-3000")])
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _vm.winner == this.user.name && _vm.user.name
+                ? _c("h1", [
+                    _vm._v("Bravo " + _vm._s(_vm.user.name) + "! t'as gagné")
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.playMode == "PC" && _vm.winner == "PC"
                 ? _c("h1", [_vm._v("XO-3000 a gagné!")])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.playMode == "2P" && _vm.winner == this.player2
+                ? _c("h1", [_vm._v(_vm._s(this.player2) + " a gagné!")])
                 : _vm._e(),
               _vm._v(" "),
               _vm.winner == "draw"
                 ? _c("h1", [_vm._v(":/ pas de gagnant!")])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.currentPlayer == "You"
-                ? _c("p", [
-                    _vm._v("\n          A toi! c'est ton tour | "),
-                    _c("img", {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.currentSign == "X",
-                          expression: "currentSign == 'X'"
-                        }
-                      ],
-                      attrs: { src: "img/x-icon.png", width: "30px" }
-                    }),
-                    _c("img", {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.currentSign == "O",
-                          expression: "currentSign == 'O'"
-                        }
-                      ],
-                      attrs: { src: "img/o-icon.png", width: "30px" }
-                    })
-                  ])
+              _vm.game.id
+                ? _c("p", [_vm._v("Partie N°" + _vm._s(_vm.game.id))])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.currentPlayer == "PC"
+              !_vm.winner
                 ? _c("p", [
-                    _vm._v("\n          XO-3000 joue | "),
+                    _vm._v(
+                      "\n          Le tour de " +
+                        _vm._s(_vm.currentPlayer) +
+                        " | "
+                    ),
                     _c("img", {
                       directives: [
                         {
@@ -48078,12 +48265,41 @@ var render = function() {
                   on: {
                     click: function($event) {
                       $event.preventDefault()
-                      _vm.restart()
+                      _vm.newRound()
                     }
                   }
                 },
-                [_vm._v("Relancer")]
-              )
+                [_vm._v("Nouvelle partie")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-warning",
+                  on: {
+                    click: function($event) {
+                      this.location.reload()
+                    }
+                  }
+                },
+                [_vm._v("Réinitialiser")]
+              ),
+              _vm._v(" "),
+              _vm.connected
+                ? _c("a", { attrs: { href: "/home" } }, [
+                    _c("button", { staticClass: "btn btn-danger" }, [
+                      _vm._v("Quitter")
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              !_vm.connected
+                ? _c("a", { attrs: { href: "/" } }, [
+                    _c("button", { staticClass: "btn btn-danger" }, [
+                      _vm._v("Quitter")
+                    ])
+                  ])
+                : _vm._e()
             ])
           ]
         ),
@@ -48144,13 +48360,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "signChoiceBox_logo" }, [
-      _c("div", { staticClass: "logo-neon alis-logo" }, [
-        _c("img", { attrs: { src: "img/alis-icon.png", width: "100px" } })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "logo-neon tictactoe-logo" }, [
-        _c("img", { attrs: { src: "img/tictactoe-icon.png", width: "300px" } })
-      ])
+      _c("img", { attrs: { src: "img/logo.png", width: "300px" } })
     ])
   }
 ]
@@ -48165,112 +48375,6 @@ if (false) {
 
 /***/ }),
 /* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(3)
-/* script */
-var __vue_script__ = __webpack_require__(47)
-/* template */
-var __vue_template__ = __webpack_require__(48)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/assets/js/components/GameComponents/BoardComponent.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4e7a0b77", Component.options)
-  } else {
-    hotAPI.reload("data-v-4e7a0b77", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    name: 'BoardComponent',
-    props: ['cells', 'currentTurn', 'filledCells', 'winner', 'gameOn'],
-
-    data: function data() {
-        return {};
-    },
-
-
-    methods: {
-        initialize: function initialize() {
-            for (var cell = 0; cell < this.cells; cell++) {
-                this.cells[cell].selected = false;
-                this.cells[cell].sign = '';
-            }
-            this.currentTurn = ''; //???
-            this.winner = '';
-            this.gameOn = true;
-        }
-    },
-
-    mounted: function mounted() {
-        this.initialize();
-    }
-});
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div")
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-4e7a0b77", module.exports)
-  }
-}
-
-/***/ }),
-/* 49 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

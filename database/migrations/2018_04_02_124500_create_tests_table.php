@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGameHistoriesTable extends Migration
+class CreateTestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateGameHistoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('game_histories', function (Blueprint $table) {
+        Schema::create('tests', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->boolean('selected');
+            $table->string('sign');
+            $table->integer('num');
         });
     }
 
@@ -26,6 +29,6 @@ class CreateGameHistoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('game_histories');
+        Schema::dropIfExists('tests');
     }
 }
