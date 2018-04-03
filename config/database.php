@@ -1,11 +1,5 @@
 <?php
 
-$url =parse_url(getenv("mysql://b42b93a7cade96:5f4c778c@eu-cdbr-west-02.cleardb.net/heroku_d7c7bc1722da5d0?reconnect=true"));
-$host = $url["eu-cdbr-west-02.cleardb.net"];
-$username = $url["b42b93a7cade96"];
-$password = $url["5f4c778c"];
-$database = substr($url["heroku_d7c7bc1722da5d0"], 1);
-
 return [
 
     /*
@@ -47,11 +41,11 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => $host,
+            'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => $database,
-            'username' => $username,
-            'password' => $password,
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
