@@ -15,4 +15,4 @@ Pour installer le projet et jouer sur votre machine, lancez les commandes suivan
 
     $ php artisan migrate
 
-    $ php artisan serve
+    $ php artisan serv
