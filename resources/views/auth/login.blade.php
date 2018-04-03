@@ -54,9 +54,6 @@
                                 <button type="submit" class="btn btn-success">
                                     Me connecter
                                 </button>
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    Mot de passe oublié?
-                                </a>
                             </div>
                             <div class="col-md-12 text-center py-5">
                               <a href="{{ route('register') }}"><button type="button" class="btn btn-outline-primary">
