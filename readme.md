@@ -1,9 +1,7 @@
 <img src="public/img/logo.png" width="300">
-<img src="https://seeklogo.com/images/L/laravel-framework-logo-C10176EC8C-seeklogo.com.png" width="100">
-<img src="http://blog.xebia.fr/wp-content/uploads/2016/11/vuejs-logo-5-300x300.png" width="100">
 
 # TicTacToe
-The TicTacToe game made with Laravel, VueJS and some love!
+The TicTacToe game made with Laravel, VueJS and love!
 [Clickez ici pour tester le jeu!](https://neontictactoe.herokuapp.com)
 
 ## Installation
