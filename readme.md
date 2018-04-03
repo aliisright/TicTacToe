@@ -1,9 +1,9 @@
 # TicTacToe
-The TicTacToe game made with avec Laravel, VueJS and love!
+The TicTacToe game made with Laravel, VueJS and some love!
 
 
 ## Installation
-Pour installer le projet et jouer sur votre machine, lancer les commandes suivante depuis le Terminal:
+Pour installer le projet et jouer sur votre machine, lancez les commandes suivantes depuis le Terminal:
 
     $ git clone https://github.com/aliisright/TicTacToe.git TicTacToe-Laravel
 
