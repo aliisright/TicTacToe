@@ -25,8 +25,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $gameWins = Game::where('won', true)->get();
-        $gameLoses = Game::where('won', false)->get();
+        $gameWins = Game::where('won', true)->where('user_id', Auth::id())->get();
+        $gameLoses = Game::where('won', false)->where('user_id', Auth::id())->get();
 
         return view('home', ['gameWins' => $gameWins, 'gameLoses' => $gameLoses]);
     }

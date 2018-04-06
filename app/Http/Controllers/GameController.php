@@ -64,8 +64,8 @@ class GameController extends Controller
     {
         $games = Auth::user()->games()->orderBy('created_at', 'desc')->get();
 
-        $gameWins = Game::where('won', true)->get();
-        $gameLoses = Game::where('won', false)->get();
+        $gameWins = Game::where('won', true)->where('user_id', Auth::id())->get();
+        $gameLoses = Game::where('won', false)->where('user_id', Auth::id())->get();
 
         return view('history', ['games' => $games, 'gameWins' => $gameWins, 'gameLoses' => $gameLoses]);
     }
