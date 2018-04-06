@@ -9,16 +9,17 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import { store } from './store/store.js';
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('GameComponent', require('./components/GameComponent.vue'));
-Vue.component('LogoComponent', require('./components/GameComponents/LogoComponent.vue'));
+Vue.component('App', require('./App.vue'));
 
 const app = new Vue({
     el: '#app',
-    render: h => h('GameComponent'),
+    store,
+    render: h => h('App'),
 });
